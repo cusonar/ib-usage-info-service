@@ -1,0 +1,11 @@
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    
+logging:
+  level:
+    com.cusonar.ib.usage.UsageInfoMapper: debug
+
+ib:
+  pre.loader.data.path: data/2019년하반기_서버개발자_데이터.csv
