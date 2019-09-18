@@ -1,7 +1,12 @@
 
 mybatis:
+  type-aliases-package: com.cusonar.ib.domain
+  mapper-locations:
+  - mybatis/mapper/**/*.xml
   configuration:
     map-underscore-to-camel-case: true
+    jdbc-type-for-null: varchar
+    
     
 logging:
   level:

@@ -1,9 +1,18 @@
-CREATE TABLE usage_info (
-year int primary key,
-rate_of_total_usage real,
-rate_of_smartphone real,
-rate_of_desktop real,
-rate_of_laptop real,
-rate_of_etc real,
-rate_of_smartpad real
+CREATE TABLE usage_rate (
+	year int primary key,
+	usage_rate real
+);
+
+CREATE TABLE device (
+	device_id int auto_increment,
+	device_name varchar(128),
+	primary key (device_id)
+);
+
+CREATE TABLE device_usage_rate (
+	year int,
+	device_id int,
+	rate real,
+	foreign key (device_id) references device(device_id),
+	primary key(year, device_id)
 );
