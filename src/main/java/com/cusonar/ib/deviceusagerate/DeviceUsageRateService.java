@@ -33,24 +33,32 @@ public class DeviceUsageRateService {
     }
     
     @Transactional(readOnly = true)
-    public List<DeviceUsageRate> getMaxDeviceUsageRateListByYear() {
+    public List<DeviceUsageRate> getMostConnectedDeviceListByYear() {
         List<DeviceUsageRate> maxList = new ArrayList<>();
-        List<DeviceUsageRate> deviceUsageRateList = getDeviceUsageRateList();
-        List<Integer> years = deviceUsageRateList.stream()
-                .map(Rate -> Rate.getYear())
+        List<Integer> years = getDeviceUsageRateList().stream()
+                .map(rate -> rate.getYear())
                 .distinct().collect(Collectors.toList());
         for (int year : years) {
-            maxList.add(getMaxDeviceUsageRateByYear(year));
+            maxList.add(getMostConnectedDeviceListByYear(year));
         }
         return maxList;
     }
     
     @Transactional(readOnly = true)
-    public DeviceUsageRate getMaxDeviceUsageRateByYear(int year) {
+    public DeviceUsageRate getMostConnectedDeviceListByYear(int year) {
         DeviceUsageRate max = getDeviceUsageRateList().stream()
-                .filter(Rate -> Rate.getYear() == year)
+                .filter(rate -> rate.getYear() == year)
                 .max(Comparator.comparing(DeviceUsageRate::getRate))
                 .orElseThrow(NotFoundException::new);
         return max;
     }
+
+    @Transactional(readOnly = true)
+	public DeviceUsageRate getMostConnectedYearByDeviceId(int deviceId) {
+    	DeviceUsageRate max = getDeviceUsageRateList().stream()
+    			.filter(rate -> rate.getDevice().getDeviceId() == deviceId)
+    			.max(Comparator.comparing(DeviceUsageRate::getRate))
+    			.orElseThrow(NotFoundException::new);
+		return max;
+	}
 }

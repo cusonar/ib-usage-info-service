@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cusonar.ib.deviceusagerate.DeviceUsagerateMapper">
+<mapper namespace="com.cusonar.ib.deviceusagerate.DeviceUsageRateMapper">
 
-    <select id="selectDeviceUsagerateWithDevice" resultType="DeviceUsageRate">
+    <select id="selectDeviceUsageRateWithDevice" resultType="DeviceUsageRate">
         SELECT dur.year, d.device_id AS "device.device_id", d.device_name AS "device.device_name", dur.rate  
         FROM device_usage_rate dur, device d
         WHERE dur.device_id = d.device_id
     </select>
     
-    <insert id="insertDeviceUsagerate" parameterType="DeviceUsageRate">
+    <insert id="insertDeviceUsageRate" parameterType="DeviceUsageRate">
         INSERT INTO device_usage_rate (year, device_id, rate) VALUES (#{year}, #{device.deviceId}, #{rate})
     </insert>
 </mapper>
