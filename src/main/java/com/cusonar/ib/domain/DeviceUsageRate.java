@@ -15,7 +15,16 @@ import lombok.ToString;
 @Builder
 public class DeviceUsageRate {
 
-    private Integer year;
-    private Device device;
-    private float rate;
+    private DeviceUsageRateId deviceUsageRateId;
+    private double rate;
+    
+    @Getter
+    @ToString
+    @EqualsAndHashCode
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DeviceUsageRateId {
+    	private int year;
+    	private Device device;
+    }
 }

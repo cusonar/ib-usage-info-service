@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cusonar.ib.deviceusagerate.DeviceUsageRateMapper">
+<mapper namespace="com.cusonar.ib.mapper.DeviceUsageRateMapper">
 
-    <select id="selectDeviceUsageRateWithDevice" resultType="DeviceUsageRate">
-        SELECT dur.year, d.device_id AS "device.device_id", d.device_name AS "device.device_name", dur.rate  
+    <select id="selectDeviceUsageRateListWithDevice" resultType="DeviceUsageRate">
+        SELECT dur.year AS "device_usage_rate_id.year", 
+        	d.device_id AS "device_usage_rate_id.device.device_id", 
+        	d.device_name AS "device_usage_rate_id.device.device_name", 
+        	dur.rate  
         FROM device_usage_rate dur, device d
         WHERE dur.device_id = d.device_id
     </select>
     
+    <select id="selectDeviceUsageRateWithDevice" parameterType="com.cusonar.ib.domain.DeviceUsageRate$DeviceUsageRateId" resultType="DeviceUsageRate">
+    	SELECT dur.year AS "device_usage_rate_id.year",
+        	d.device_id AS "device_usage_rate_id.device.device_id", 
+        	d.device_name AS "device_usage_rate_id.device.device_name", 
+        	dur.rate
+        FROM device_usage_rate dur, device d
+        WHERE dur.device_id = d.device_id
+        AND dur.year = #{year}
+        AND dur.device_id = #{device.deviceId}
+    </select>
+    
     <insert id="insertDeviceUsageRate" parameterType="DeviceUsageRate">
-        INSERT INTO device_usage_rate (year, device_id, rate) VALUES (#{year}, #{device.deviceId}, #{rate})
+        INSERT INTO device_usage_rate (year, device_id, rate) 
+        VALUES (#{deviceUsageRateId.year}, #{deviceUsageRateId.device.deviceId}, #{rate})
     </insert>
 </mapper>

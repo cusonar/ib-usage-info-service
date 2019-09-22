@@ -1,6 +1,13 @@
+DROP TABLE IF EXISTS usage_rate;
+DROP TABLE IF EXISTS device;
+DROP TABLE IF EXISTS device_usage_rate;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS authorities;
+
 CREATE TABLE usage_rate (
-	year int primary key,
-	usage_rate real
+	year int,
+	usage_rate real,
+	primary key (year)
 );
 
 CREATE TABLE device (

@@ -1,14 +1,14 @@
 package com.cusonar.ib.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsageRate {
+public class AuthenticationRequest {
 
-	private int year;
-	private double usageRate;
+	private String username;
+	private String password;
 }
