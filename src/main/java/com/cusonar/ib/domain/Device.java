@@ -1,5 +1,7 @@
 package com.cusonar.ib.domain;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -13,9 +15,11 @@ import lombok.ToString;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class Device {
+public class Device implements Serializable {
 
-    @JsonProperty("device_id")
+	private static final long serialVersionUID = -8438002032213431604L;
+	
+	@JsonProperty("device_id")
     private Integer deviceId;
     @JsonProperty("device_name")
     private String deviceName;

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ public class DeviceUsageRateService {
 	private final static Integer PREDICT_YEAR = 2019;
     private final DeviceUsageRateMapper deviceUsageRateMapper;
     
+    @Cacheable(value = "deviceUsageRateList")
     public List<DeviceUsageRate> getDeviceUsageRateListWithDevice() {
         return deviceUsageRateMapper.selectDeviceUsageRateListWithDevice();
     }

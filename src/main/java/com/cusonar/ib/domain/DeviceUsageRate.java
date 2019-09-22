@@ -1,5 +1,7 @@
 package com.cusonar.ib.domain;
 
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -13,9 +15,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DeviceUsageRate {
+public class DeviceUsageRate implements Serializable {
 
-    private DeviceUsageRateId deviceUsageRateId;
+	private static final long serialVersionUID = -2270737672039746179L;
+	
+	private DeviceUsageRateId deviceUsageRateId;
     private double rate;
     
     @Getter

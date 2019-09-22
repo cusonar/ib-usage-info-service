@@ -2,7 +2,9 @@ spring:
   datasource:
     hikari:
       jdbc-url: jdbc:h2:~/test
-      
+  redis:
+    host: localhost
+    port: 6370
 
 mybatis:
   type-aliases-package: com.cusonar.ib.domain
@@ -12,9 +14,9 @@ mybatis:
     map-underscore-to-camel-case: true
     jdbc-type-for-null: varchar
     
-#logging:
-#  level:
-#    com.cusonar.ib.usage.UsageInfoMapper: debug
+logging:
+  level:
+    com.cusonar.ib.mapper: debug
     
 ib:
   pre.loader.data.path: data/2019년하반기_서버개발자_데이터.csv

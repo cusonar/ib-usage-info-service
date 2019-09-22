@@ -1,26 +1,34 @@
-# 인터넷뱅킹 이용 현황 정보 제공 API 프로젝
+# 인터넷뱅킹 이용 현황 정보 제공 API 프로젝트
 
 개발 프레임워크 : Spring Boot + Security + MyBatis + H2
 
-Spring MVC 패턴을 사용하여 RESTful API로 백엔드를 구성하였으며,
+Spring MVC 패턴을 사용하여 RESTful API로 백엔드를 구현 하였으며, Persistent Layer는 MyBatis를 사용했습니다.
+추가로 JWT 인증 부분은 Spring Security를 활용하여 구현하였습니다.
 
-문제 해결 전
+문제 해결 전략
 
-* 사용자는 텍스트로 된 할일을 추가할 수 있다. 
-  * 할일 추가 시 다른 할일들을 참조 걸 수 있다.
-    * 미완료된 할일 추가 시, 참조하는 할일 모두 미완료여야 한다.
-    * 완료된 할일 추가 시, 참조하는 할일에 대한 제약이 없다.
-  * 참조는 다른 할일의 id를 명시하는 형태로 구현한다. (예시 참고)
-* 사용자는 할일을 수정할 수 있다.
-  * 미완료 수정인 경우, 참조하는 할일 모두 미완료여야 한다.
-  * 완료 수정인 경우, 참조된 할일 모두 완료여야 한다.
-  * 참조 수정 시, 순환참조/셀프참조가 방지되어야 한다.
-* 사용자는 할일 목록을 조회할 수 있다.
-  * 조회시 작성일, 최종수정일, 내용이 조회 가능하다.
-  * 할일 목록은 페이징 기능이 있다.
-* 사용자는 할일을 완료처리 할 수 있다.
-  * 완료처리 시 참조가 걸린 완료되지 않은 할일이 있다면 완료처리할 수 없다. (예시 참고)
-
+* 테이블은 아래와 같이 구성
+  * 디바이스를 관리하는 device
+    * device 테이블은 id, name으로 구성되어 있고, id는 auto increment 전략을 사용
+  * 기간별 이용률을 관리하는 usage_rate
+  	* usage_rate 테이블은 year, rate 필드로 구성
+  * 기간별 기계별 비율을 관리하는 device_usage_rate
+    * device_usage_rate 테이블은 year, device_id, rate 필드로 구성
+    * device_usage_rate 테이블은 device 테이블과 다대일 단방향 매핑이 됨
+* API
+  * 인터넷뱅킹 서비스 접속 기기 목록을 출력하는 API
+    * /api/devices
+  * 각 년도별로 인터넷뱅킹을 가장 많이 이용하는 접속기기를 출력하는 API
+    * /api/device-usage-rates/most-connected-devices
+  * 특정 년도를 입력받아 그 해에 인터넷뱅킹에 가장 많이 접속하는 기기 이름을 출력하는 API
+    * /api/device-usage-rates/most-connected-devices/{deviceId}
+  * 디바이스 아이디를 입력받아 인터넷뱅킹에 접속 비율이 가장 많은 해를 출력하는 API
+    * /api/device-usage-rates/most-connected-year
+  * 인터넷뱅킹 접속 기기 ID 를 입력받아 2019 년도 인터넷뱅킹 접속 비율을 예측하는 API
+    * /api/device-usage-rates/predictions/{deviceId}
+* 추가제약사항
+  * 10000 TPS
+  * 인증을 위한 JWT - signup, signin, refresh token 기능 구현
 
 
 ## Prerequisites
@@ -47,7 +55,12 @@ JDK 1.8 이상
 
 ```
 cd ./build/libs
-java -jar todo-1.0.0-RELEASE.jar
+mkdir data
+cp [filepath] ./data/
+java -jar ib-usage-info-service-1.0.0.RELEASE.jar
+OR
+cd ./build/libs
+java -jar -Dib.pre.loader.data.path='[filepath]' ib-usage-info-service-1.0.0.RELEASE.jar
 ```
 
 혹은 프로젝트 루트 폴더에서
@@ -68,7 +81,7 @@ Chanung Yun(cu.sonar@gmail.com)
 
 ## License
 
-This project is licensed under the MIT License
+This project is licensed under the GPLv3 License
 
 ## Dependencies
 
