@@ -1,9 +1,10 @@
 package com.cusonar.ib.util.csv;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class CsvUtil {
 	
@@ -18,7 +19,8 @@ public class CsvUtil {
 			CsvFirstRowAction firstRowAction,
 			CsvOtherRowsAction otherRowsAction) throws FileNotFoundException, IOException {
 	    if (!csvPath.endsWith(".csv")) throw new IllegalArgumentException("csv 파일만 지원합니다.");
-		try (BufferedReader br = new BufferedReader(new FileReader(csvPath))) {
+		try (BufferedReader br = new BufferedReader(
+				new InputStreamReader(new FileInputStream(csvPath), "UTF8"))) {
 	          String line;
 	          line = br.readLine();
 	          

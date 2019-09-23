@@ -16,23 +16,48 @@ Spring MVC 패턴을 사용하여 RESTful API로 백엔드를 구현 하였으�
     * device_usage_rate 테이블은 year, device_id, rate 필드로 구성
     * device_usage_rate 테이블은 device 테이블과 다대일 단방향 매핑이 됨
 * API
+  * sign up API
+    * /api/users/signup
+    * Parameter(application/json)
+      * username: string
+      * password: string
+    * Return(application/json)
+      * token: string
+  * sign in API
+    * /api/users/signin
+    * Parameter(application/json)
+      * username: string
+      * password: string
+    * Return(application/json)
+      * token: string
+  * -- 아래 API는 token을 header(Authorization) Bearer(대소문자 구분) + ' ' + token에 넣어야 사용 가능 --
+  * refresh token API
+    * GET /api/users/refresh
   * 인터넷뱅킹 서비스 접속 기기 목록을 출력하는 API
-    * /api/devices
+    * GET /api/devices
   * 각 년도별로 인터넷뱅킹을 가장 많이 이용하는 접속기기를 출력하는 API
-    * /api/device-usage-rates/most-connected-devices
+    * GET /api/device-usage-rates/most-connected-devices
   * 특정 년도를 입력받아 그 해에 인터넷뱅킹에 가장 많이 접속하는 기기 이름을 출력하는 API
-    * /api/device-usage-rates/most-connected-devices/{deviceId}
+    * GET /api/device-usage-rates/most-connected-devices/{year}
+    * Parameter
+      * year: int
   * 디바이스 아이디를 입력받아 인터넷뱅킹에 접속 비율이 가장 많은 해를 출력하는 API
-    * /api/device-usage-rates/most-connected-year
+    * GET /api/device-usage-rates/most-connected-years/{deviceId}
+    * Parameter
+      * deviceId: int
   * 인터넷뱅킹 접속 기기 ID 를 입력받아 2019 년도 인터넷뱅킹 접속 비율을 예측하는 API
-    * /api/device-usage-rates/predictions/{year}/{deviceId}
+    * Linear Regression 알고리즘 활용
+    * GET /api/device-usage-rates/predictions/{year}/{deviceId}
+    * Parameter
+      * year: int
+      * deviceId: int
 * 추가제약사항
   * 10000 TPS
     * redis 캐시를 사용하여 DB와의 연결을 최소화함
   * 인증을 위한 JWT - signup, signin, refresh token 기능 구현
     * spring security의 jdbc를 기본으로 사용함
     * jjwt를 사용해 jwt token을 생성/유효성 체크함
-    * session 전략을 stateless로 하되, 요청시마다 token을 체크해 사용자를 판단함
+    * session 전략을 stateless로 하고, 요청시마다 token을 체크해 사용자를 판단함
 
 
 ## Prerequisites
