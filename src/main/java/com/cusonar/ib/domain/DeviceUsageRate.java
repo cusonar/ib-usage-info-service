@@ -20,7 +20,7 @@ public class DeviceUsageRate implements Serializable {
 	private static final long serialVersionUID = -2270737672039746179L;
 	
 	private DeviceUsageRateId deviceUsageRateId;
-    private double rate;
+    private float rate;
     
     @Getter
     @ToString

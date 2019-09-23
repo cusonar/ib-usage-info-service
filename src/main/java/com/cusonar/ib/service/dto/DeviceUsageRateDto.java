@@ -18,7 +18,7 @@ public class DeviceUsageRateDto {
         private Integer deviceId;
         @JsonProperty("device_name")
         private String deviceName;
-        private double rate;
+        private float rate;
         
         public static Response of(DeviceUsageRate deviceUsageRate) {
             return Response.builder()
@@ -35,7 +35,7 @@ public class DeviceUsageRateDto {
     	private int year;
     	@JsonProperty("device_name")
         private String deviceName;
-        private double rate;
+        private float rate;
         
         public static ResponseOne of(DeviceUsageRate deviceUsageRate) {
             return ResponseOne.builder()

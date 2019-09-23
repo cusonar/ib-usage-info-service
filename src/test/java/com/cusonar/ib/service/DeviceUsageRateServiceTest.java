@@ -98,7 +98,7 @@ public class DeviceUsageRateServiceTest {
 		Integer predictYear = 2019;
 		when(mapper.selectDeviceUsageRateListWithDevice()).thenReturn(rateList);
 		DeviceUsageRate predicted = service.predictConnectedRateByDeviceId(device1.getDeviceId());
-		assertEquals((double) predictYear, predicted.getDeviceUsageRateId().getYear(), Double.MIN_VALUE);
+		assertEquals((float) predictYear, predicted.getDeviceUsageRateId().getYear(), Float.MIN_VALUE);
 		assertEquals(device1.getDeviceId(), 
 				predicted.getDeviceUsageRateId().getDevice().getDeviceId());
 		assertEquals(device1.getDeviceName(),

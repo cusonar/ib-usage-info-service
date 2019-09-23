@@ -65,7 +65,7 @@ public class DeviceUsageRateService {
     			.map(rate -> new Double(rate.getDeviceUsageRateId().getYear()))
     			.toArray(Double[]::new);
     	Double[] yArray = getFilteredStream(rateList, deviceId)
-    			.map(rate -> rate.getRate())
+    			.map(rate -> new Double(rate.getRate()))
     			.toArray(Double[]::new);
     	
     	Device device = getFilteredStream(rateList, deviceId)
@@ -74,7 +74,7 @@ public class DeviceUsageRateService {
     			.orElseThrow(NotFoundException::new);
 		DeviceUsageRate.DeviceUsageRateId deviceUsageRateId = 
 				new DeviceUsageRate.DeviceUsageRateId(PREDICT_YEAR, device);
-		double predicted = predictConnectedRateByLinearRegression(xArray, yArray, PREDICT_YEAR);
+		float predicted = predictConnectedRateByLinearRegression(xArray, yArray, PREDICT_YEAR);
 		return new DeviceUsageRate(deviceUsageRateId, predicted);
     }
     
@@ -83,11 +83,11 @@ public class DeviceUsageRateService {
     			.filter(rate -> rate.getDeviceUsageRateId().getDevice().getDeviceId() == deviceId);
     }
     
-    private double predictConnectedRateByLinearRegression(Double[] x, Double[] y, int year) {
+    private float predictConnectedRateByLinearRegression(Double[] x, Double[] y, int year) {
     	LinearRegression lr = new LinearRegression(x, y);
-    	double predicted = lr.predict((double) year);
-    	if (predicted < 0) predicted = 0.0;
-    	if (predicted > 100)  predicted = 100.0;
+    	float predicted = (float) lr.predict((double) year);
+    	if (predicted < 0) predicted = 0.0f;
+    	if (predicted > 100)  predicted = 100.0f;
     	return predicted;
     }
 }
