@@ -3,6 +3,8 @@ package com.cusonar.ib.controller;
 import java.security.Principal;
 import java.util.Arrays;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,22 +36,24 @@ public class UserController {
 	private final JwtTokenUtil jwtTokenUtil;
 	
 	@PostMapping("signup")
-	public JwtTokenResponse signup(@RequestBody SignupRequest request) {
+	public ResponseEntity<JwtTokenResponse> signup(@RequestBody SignupRequest request) {
 		User user = new User(
 				request.getUsername(), passwordEncoder.encode(request.getPassword()), 
 				Arrays.asList(new SimpleGrantedAuthority("USER")));
 		userService.createUser(user);
 		
-		return signIn(new AuthenticationRequest(request.getUsername(), request.getPassword()));
+		return new ResponseEntity<>(
+		        signIn(new AuthenticationRequest(request.getUsername(), request.getPassword())).getBody(),
+		        HttpStatus.CREATED);
 	}
 	
 	@PostMapping("signin")
-	public JwtTokenResponse signIn(@RequestBody AuthenticationRequest request) {
+	public ResponseEntity<JwtTokenResponse> signIn(@RequestBody AuthenticationRequest request) {
 		am.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 		UserDetails userDetails = userService
 				.loadUserByUsername(request.getUsername());
 		String token = jwtTokenUtil.generateToken(userDetails);
-		return new JwtTokenResponse(token);
+		return new ResponseEntity<>(new JwtTokenResponse(token), HttpStatus.CREATED);
 	}
 	
 	@GetMapping("refresh")
