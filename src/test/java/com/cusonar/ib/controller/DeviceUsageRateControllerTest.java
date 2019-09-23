@@ -54,17 +54,17 @@ public class DeviceUsageRateControllerTest {
 		device2 = new Device(2, "device2");
 		
 		rate11 = new DeviceUsageRate(
-					new DeviceUsageRate.DeviceUsageRateId(2019, device1), 10.02f);
+					new DeviceUsageRate.DeviceUsageRateId(2018, device1), 10.02f);
 		rate12 = new DeviceUsageRate(
-					new DeviceUsageRate.DeviceUsageRateId(2018, device1), 20.06f);
+					new DeviceUsageRate.DeviceUsageRateId(2017, device1), 20.06f);
 		rate13 = new DeviceUsageRate(
-					new DeviceUsageRate.DeviceUsageRateId(2017, device1), 50.05f);
+					new DeviceUsageRate.DeviceUsageRateId(2016, device1), 50.05f);
 		rate21 = new DeviceUsageRate(
-					new DeviceUsageRate.DeviceUsageRateId(2019, device2), 17.02f);
+					new DeviceUsageRate.DeviceUsageRateId(2018, device2), 17.02f);
 		rate22 = new DeviceUsageRate(
-					new DeviceUsageRate.DeviceUsageRateId(2018, device2), 41.08f);
+					new DeviceUsageRate.DeviceUsageRateId(2017, device2), 41.08f);
 		rate23 = new DeviceUsageRate(
-					new DeviceUsageRate.DeviceUsageRateId(2017, device2), 19.02f);
+					new DeviceUsageRate.DeviceUsageRateId(2016, device2), 19.02f);
 	}
 	
 	@Test
@@ -89,7 +89,7 @@ public class DeviceUsageRateControllerTest {
 	
 	@Test
 	public void getMostConnectedDeviceByYearTest() throws Exception {
-		int year = 2019;
+		int year = 2018;
 		when(deviceUsageRateService.getMostConnectedDeviceByYear(year)).thenReturn(rate21);
 		mockMvc.perform(MockMvcRequestBuilders.get(DEVICE_USAGE_RATE_URI + "/most-connected-devices/" + year)
 				.accept(MediaType.APPLICATION_JSON))
@@ -117,5 +117,24 @@ public class DeviceUsageRateControllerTest {
 		.andExpect(jsonPath("$.result.rate")
 				.value(rate22.getRate()))
 		;
+	}
+	
+	@Test
+	public void predictConnectedRateTest() throws Exception {
+	    int year = 2019;
+	    Integer deviceId = 2;
+	    DeviceUsageRate predicted = new DeviceUsageRate(
+                new DeviceUsageRate.DeviceUsageRateId(year, device2), 90.01f);
+        when(deviceUsageRateService.predictConnectedRate(year, deviceId)).thenReturn(predicted);
+        mockMvc.perform(MockMvcRequestBuilders.get(DEVICE_USAGE_RATE_URI + "/predictions/" + year + "/" + deviceId)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.year")
+                .value(predicted.getDeviceUsageRateId().getYear()))
+        .andExpect(jsonPath("$.device_name")
+                .value(predicted.getDeviceUsageRateId().getDevice().getDeviceName()))
+        .andExpect(jsonPath("$.rate")
+                .value(predicted.getRate()))
+        ;
 	}
 }

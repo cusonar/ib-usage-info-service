@@ -16,7 +16,8 @@ public class CsvUtil {
 	
 	public void readAndDoSomething(
 			CsvFirstRowAction firstRowAction,
-			CsvOtherRowAction otherRowAction) throws FileNotFoundException, IOException {
+			CsvOtherRowsAction otherRowsAction) throws FileNotFoundException, IOException {
+	    if (!csvPath.endsWith(".csv")) throw new IllegalArgumentException("csv 파일만 지원합니다.");
 		try (BufferedReader br = new BufferedReader(new FileReader(csvPath))) {
 	          String line;
 	          line = br.readLine();
@@ -26,7 +27,7 @@ public class CsvUtil {
 	          
 	          while ((line = br.readLine()) != null) {
 	              values = line.split(COMMA_DELIMITER);
-	              otherRowAction.action(values);
+	              otherRowsAction.action(values);
 	          }          
 	    }
 	}

@@ -25,10 +25,14 @@ Spring MVC 패턴을 사용하여 RESTful API로 백엔드를 구현 하였으�
   * 디바이스 아이디를 입력받아 인터넷뱅킹에 접속 비율이 가장 많은 해를 출력하는 API
     * /api/device-usage-rates/most-connected-year
   * 인터넷뱅킹 접속 기기 ID 를 입력받아 2019 년도 인터넷뱅킹 접속 비율을 예측하는 API
-    * /api/device-usage-rates/predictions/{deviceId}
+    * /api/device-usage-rates/predictions/{year}/{deviceId}
 * 추가제약사항
   * 10000 TPS
+    * redis 캐시를 사용하여 DB와의 연결을 최소화함
   * 인증을 위한 JWT - signup, signin, refresh token 기능 구현
+    * spring security의 jdbc를 기본으로 사용함
+    * jjwt를 사용해 jwt token을 생성/유효성 체크함
+    * session 전략을 stateless로 하되, 요청시마다 token을 체크해 사용자를 판단함
 
 
 ## Prerequisites

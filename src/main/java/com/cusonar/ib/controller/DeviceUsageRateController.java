@@ -45,9 +45,11 @@ public class DeviceUsageRateController {
     					deviceUsageRateService.getMostConnectedYearByDeviceId(deviceId)));
     }
     
-    @GetMapping("predictions/{deviceId}")
-    public DeviceUsageRateDto.ResponseOne predictConnectedRateByDeviceId(@PathVariable Integer deviceId) {
-    	DeviceUsageRate rate = deviceUsageRateService.predictConnectedRateByDeviceId(deviceId);
+    @GetMapping("predictions/{year}/{deviceId}")
+    public DeviceUsageRateDto.ResponseOne predictConnectedRate(
+            @PathVariable int year,
+            @PathVariable Integer deviceId) {
+    	DeviceUsageRate rate = deviceUsageRateService.predictConnectedRate(year, deviceId);
 		return DeviceUsageRateDto.ResponseOne.of(rate);
     }
 }

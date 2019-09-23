@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class DeviceUsageRateService {
-	private final static Integer PREDICT_YEAR = 2019;
     private final DeviceUsageRateMapper deviceUsageRateMapper;
     
     @Cacheable(value = "deviceUsageRateList")
@@ -59,7 +58,7 @@ public class DeviceUsageRateService {
 		return max;
 	}
     
-    public DeviceUsageRate predictConnectedRateByDeviceId(Integer deviceId) {
+    public DeviceUsageRate predictConnectedRate(int year, Integer deviceId) {
     	List<DeviceUsageRate> rateList = getDeviceUsageRateListWithDevice();
     	Double[] xArray = getFilteredStream(rateList, deviceId)  
     			.map(rate -> new Double(rate.getDeviceUsageRateId().getYear()))
@@ -73,8 +72,8 @@ public class DeviceUsageRateService {
     			.map(rate -> rate.getDeviceUsageRateId().getDevice())
     			.orElseThrow(NotFoundException::new);
 		DeviceUsageRate.DeviceUsageRateId deviceUsageRateId = 
-				new DeviceUsageRate.DeviceUsageRateId(PREDICT_YEAR, device);
-		float predicted = predictConnectedRateByLinearRegression(xArray, yArray, PREDICT_YEAR);
+				new DeviceUsageRate.DeviceUsageRateId(year, device);
+		float predicted = predictConnectedRateByLinearRegression(xArray, yArray, year);
 		return new DeviceUsageRate(deviceUsageRateId, predicted);
     }
     

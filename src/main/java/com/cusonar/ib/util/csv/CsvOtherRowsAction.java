@@ -1,6 +1,6 @@
 package com.cusonar.ib.util.csv;
 
-public interface CsvOtherRowAction {
+public interface CsvOtherRowsAction {
 	
 	public void action(String[] values);
 }

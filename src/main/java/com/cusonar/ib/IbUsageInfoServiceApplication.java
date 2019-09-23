@@ -42,23 +42,23 @@ public class IbUsageInfoServiceApplication {
 			CsvUtil csvUtil = new CsvUtil(IB_PRE_LOADER_DATA_PATH);
 			List<Integer> deviceIdList = new ArrayList<>();
 			
-			csvUtil.readAndDoSomething(values -> {
-				Arrays.asList(values).stream()
+			csvUtil.readAndDoSomething(firstRow -> {
+				Arrays.asList(firstRow).stream()
 					.skip(2)
 					.map(value -> new Device(value))
 					.forEach(device -> {
 						deviceMapper.insertDevice(device);
 						deviceIdList.add(device.getDeviceId());
 					});
-			}, values -> {
-				for (int i=0; i<values.length; i++) values[i] = values[i].replaceAll("-", "0.0");
-				int year = Integer.parseInt(values[0]);
-				usageRateMapper.insertUsageRate(new UsageRate(year, Float.parseFloat(values[1])));
+			}, otherRow -> {
+				for (int i=0; i<otherRow.length; i++) otherRow[i] = otherRow[i].replaceAll("-", "0.0");
+				int year = Integer.parseInt(otherRow[0]);
+				usageRateMapper.insertUsageRate(new UsageRate(year, Float.parseFloat(otherRow[1])));
 				
-				for (int i=0; i<values.length-2; i++) {
+				for (int i=0; i<otherRow.length-2; i++) {
 					DeviceUsageRate.DeviceUsageRateId id = new DeviceUsageRate.DeviceUsageRateId(year, new Device(deviceIdList.get(i)));
 					deviceUsageRateMapper.insertDeviceUsageRate(
-							new DeviceUsageRate(id, Float.parseFloat(values[i+2])));
+							new DeviceUsageRate(id, Float.parseFloat(otherRow[i+2])));
 				}
 			});
 		};
