@@ -29,6 +29,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("api/users")
 @RequiredArgsConstructor
 public class UserController {
+    
+    private static final String ROLE_USER = "ROLE_USER";
 	
 	private final UserService userService;
 	private final PasswordEncoder passwordEncoder; 
@@ -39,7 +41,7 @@ public class UserController {
 	public ResponseEntity<JwtTokenResponse> signup(@RequestBody SignupRequest request) {
 		User user = new User(
 				request.getUsername(), passwordEncoder.encode(request.getPassword()), 
-				Arrays.asList(new SimpleGrantedAuthority("USER")));
+				Arrays.asList(new SimpleGrantedAuthority(ROLE_USER)));
 		userService.createUser(user);
 		
 		return new ResponseEntity<>(

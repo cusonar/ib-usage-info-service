@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 			.csrf().disable()
 			.authorizeRequests()
-			.antMatchers("/api/users/signup", "/api/users/signin").permitAll()
+			.antMatchers("/api/users/signup", "/api/users/signin", "/h2-console/**").permitAll()
 			.anyRequest().authenticated()
 		.and()
 			.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
@@ -45,12 +45,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		userService.setDataSource(dataSource);
 		auth.userDetailsService(userService)
 		.and()
 			.jdbcAuthentication().dataSource(dataSource).withDefaultSchema()
 			.passwordEncoder(passwordEncoder())
-			.withUser("user").password(passwordEncoder().encode("1234")).authorities("USER");
+			.withUser("user").password(passwordEncoder().encode("1234")).roles("USER")
+			;
 	}
 
 	@Bean
